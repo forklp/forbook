@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from . import models
 from user_page import models
 # Create your views here.
+
 def Comment(request):
     Bookname = request.POST.get('')
     Comment = models.comment.objects.all()

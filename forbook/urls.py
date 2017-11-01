@@ -18,5 +18,8 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('demos.urls')),
+    url(r'^bookstore/', include('demos.urls')),
+    url(r'^bookstore/', include('index.urls')),
+    url(r'^bookstore/', include('book_page.urls')),
+    url(r'^bookstore/', include('user_page.urls')),
 ]
