@@ -58,7 +58,14 @@ def MyLogin(request):
         if a_user.name==Account and a_user.password!=PassWord:
             return HttpResponse(1)
     return HttpResponse(0)
-    # username = list(models.User.objects.filter(account=Account))
-    # if username:
-    #     return HttpResponse(1)
-    # return HttpResponse(0)
+
+
+def ModifiAccount(request):
+    OldAccount = request.POST.get('oldusername', 'OldAccount')
+    NewAccount = request.POST.get('newusername','NewAccount')
+    models.User.objects.filter(account=OldAccount).update(account=NewAccount)
+
+def ModifiPassword(request):
+    OldPassWord = request.POST.get('oldpasswd', 'OldPassWord')
+    NewPassWord = request.POST.get('newpasswd', 'NewPassWord')
+    models.User.objects.filter(password=OldPassWord).update(password=NewPassWord)
