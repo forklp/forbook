@@ -13,25 +13,24 @@ def _format_addr(s):
     name, addr = parseaddr(s)
     return formataddr((Header(name, 'utf-8').encode(), addr))
 
-def MyRegister(request):
-    if request.method == 'GET':
+def MyVerVode(request):
+    if request.method == 'POST':
         from_addr = 'm17711046053@163.com'
         password = 'a13118905007'
-        to_addr = request.GET.get('username','Account')
+        to_addr = request.POST.get('account','Account')
 
         user = models.User.objects.all()
         for a_user in user:
             if a_user.account==to_addr:
                 return HttpResponse(0)
+        PassWord = request.POST.get('password','PassWord')
 
-        PassWord = request.GET.get('passwd','PassWord')
-        models.User.objects.create(account=to_addr,password=PassWord)
         smtp_server = 'smtp.163.com'
         i = 0
         while i < 6:
-            a = random.sample('0123456789', 6)
+            vercode = random.sample('0123456789', 6)
             i = i + 1
-        VerCode = ''.join(a)
+        VerCode = ''.join(vercode)
         msg = MIMEText(VerCode, 'plain', 'utf-8')
         msg['From'] = _format_addr('<%s>' % from_addr)
         msg['To'] = _format_addr('管理员 <%s>' % to_addr)
@@ -42,20 +41,21 @@ def MyRegister(request):
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
         server.quit()
-    return HttpResponse(1)
+        #models.User.objects.create(account=to_addr, password=PassWord)
+        return HttpResponse(1)
 
 
 
 def MyLogin(request):
-    Account = request.POST.get('username', 'Account')
-    PassWord = request.POST.get('passwd', 'PassWord')
+    Account = request.POST.get('account', 'Account')
+    PassWord = request.POST.get('password', 'PassWord')
     user=models.User.objects.all()
     for a_user in user:
-        if a_user.name==Account and a_user.password==PassWord:
+        if a_user.account==Account and a_user.password==PassWord:
             response = HttpResponse(2)
             response.set_cookie('Account',Account,30)
             return response
-        if a_user.name==Account and a_user.password!=PassWord:
+        if a_user.account==Account and a_user.password!=PassWord:
             return HttpResponse(1)
     return HttpResponse(0)
 

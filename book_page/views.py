@@ -6,12 +6,15 @@ from user_page import models
 
 def Comment(request):
     Bookname = request.POST.get('')
-    Comment = models.comment.objects.all()
-    abook = []
-    for a_comment in Comment:
-        if a_comment.bookname==Bookname:
-            abook.append(a_comment)
+    #Comment = models.comment.objects.all()
+    # abook = []
+    # for a_comment in Comment:
+    #     if a_comment.bookname==Bookname:
+    #         abook.append(a_comment)
+    # return JsonResponse(abook)
+    abook = models.comment.objects.filter(bookname=Bookname)
     return JsonResponse(abook)
+
 
 def NewComment(request):
     Bookname = request.POST.get('')
@@ -21,11 +24,13 @@ def NewComment(request):
 
 def Cart (request):
     Account = request.POST.get('')
-    Shopping = models.ShoppingCart.objects.all()
-    acart = []
-    for a_shopping in Shopping:
-        if Account== a_shopping.account:
-            acart.append(a_shopping)
+    # Shopping = models.ShoppingCart.objects.all()
+    # acart = []
+    # for a_shopping in Shopping:
+    #     if Account== a_shopping.account:
+    #         acart.append(a_shopping)
+    # return JsonResponse(acart)
+    acart = models.ShoppingCart.objects.filter(account=Account)
     return JsonResponse(acart)
 
 def Buy (request):
