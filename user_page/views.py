@@ -57,17 +57,19 @@ def MyLogin(request):
     user=models.User.objects.all()
     for a_user in user:
         if a_user.account==Account and a_user.password==PassWord:
-            response = HttpResponse(2)
-            response.set_cookie('Account',Account,30)
-            return response
+            return render(request,'index/index.html')
         if a_user.account==Account and a_user.password!=PassWord:
             return HttpResponse(1)
     return HttpResponse(0)
 
 def PersonalInformation(request):
     Account = request.POST.get('account','Account')
-    a_user = models.User.objects.filter(account=Account)
-    return render('request','user_page/personal.html/',Context(a_user))
+    a_user = models.User.objects.get(account=Account)
+    auser = {}
+    auser['account'] = a_user.account
+    auser['password'] = a_user.password
+    auser['username'] = a_user.username
+    return render('request','user_page/personal.html/',auser)
 
 def ModifiPersonal(request):
     Account = request.POST.get('account','Account')

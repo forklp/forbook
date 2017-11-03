@@ -14,7 +14,16 @@ def Comment(request):
     #         abook.append(a_comment)
     # return JsonResponse(abook)
     abook = models.comment.objects.filter(bookname=Bookname)
-    return render(request,'/book_page/comment.html',Context(abook))
+    dict1 = {}
+    dict2 = {}
+    i = 0
+    for a_book in abook:
+        dict2['account'] = a_book.account
+        dict2['contents'] = a_book.contents
+        dict1['i'] = dict2
+        i = i + 1
+
+    return render(request,'/book_page/comment.html',dict1)
 
 
 def NewComment(request):
@@ -33,7 +42,15 @@ def Cart (request):
     #         acart.append(a_shopping)
     # return JsonResponse(acart)
     acart = models.ShoppingCart.objects.filter(account=Account)
-    return JsonResponse(acart)
+    dict1 = {}
+    dict2 = {}
+    i = 0
+    for a_cart in acart:
+        dict2['account'] = a_cart.account
+        dict2['bookname'] = a_cart.bookname
+        dict1['i'] = dict2
+        i = i+1
+    return render(request,'user_page/cart.html/',dict1)
 
 def Buy (request):
     Account = request.POST.get('account','Account')
