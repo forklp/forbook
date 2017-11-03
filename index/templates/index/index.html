@@ -187,24 +187,29 @@
             </form>
             <form class="g-register" action="#" style="display: none;">
                 <div class="u-forms">
-                    <input id="r-username" class="l-user f-tr2" type="text" placeholder="请输入您的用户名">
+                    <input id="r-username" class="l-user f-tr2" type="text" placeholder="请输入您的邮箱地址">
+                    <label for="r-username"></label>
                     <input id="r-password" class="l-pwd f-tr2" type="password" placeholder="请输入您的密码">
-                    <input class="l-pwd2 f-tr2" type="password" placeholder="请再次输入您的密码">
+                    <input id="r-password2" class="l-pwd2 f-tr2" type="password" placeholder="请再次输入您的密码">
+                    <label for="r-password2"></label>
+                    <div class="code-box">
+                        <input id="code" class="l-code f-tr2" type="text" disabled="disabled" placeholder="请输入验证码">
+                        <input type="button" class="code-btn" value="发送验证码">
+                    </div>
                 </div>
                 <span class="links2">
                     <a href="#" class="js-login">已有账号？登录</a>
                 </span>
-                <input type="button" class="form-btn f-tr2" value="注册">
+                <input type="button" class="form-btn f-tr2 disable" disabled="disabled" value="注册">
             </form>
         </div>
 
-        <script src="/static/index/js/jquery-3.2.1.min.js"></script>
+        <script src="../../static/index/js/jquery-3.2.1.min.js"></script>
         <script>
             $.ajaxSetup({
                 data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
             });
         </script>
-        <script src="/static/index/js/index.js"></script>
-
+        <script src="../../static/index/js/index.js"></script>
     </body>
 </html>

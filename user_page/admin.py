@@ -7,7 +7,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('pub_time',)
 
 class ShoppigCartAdmin(admin.ModelAdmin):
-    list_display = ('bookname','account')
+    list_display = ('bookname','account','pub_time')
     list_filter = ('pub_time',)
 admin.site.register(User,UserAdmin)
 admin.site.register(ShoppingCart,ShoppigCartAdmin)

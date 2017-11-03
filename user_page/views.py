@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.template import Template, Context
 from . import models
 import json
 import random
@@ -41,10 +42,14 @@ def MyVerVode(request):
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
         server.quit()
-        #models.User.objects.create(account=to_addr, password=PassWord)
-        return HttpResponse(1)
 
+        return JsonResponse(VerCode)
 
+def MyRegister(request):
+    Account = request.POST.get('account', 'Account')
+    PassWord = request.POST.get('password', 'PassWord')
+    models.User.objects.create(account=Account,password=PassWord)
+    return HttpResponse(1)
 
 def MyLogin(request):
     Account = request.POST.get('account', 'Account')
@@ -59,13 +64,15 @@ def MyLogin(request):
             return HttpResponse(1)
     return HttpResponse(0)
 
+def PersonalInformation(request):
+    Account = request.POST.get('account','Account')
+    a_user = models.User.objects.filter(account=Account)
+    return render('request','user_page/personal.html/',Context(a_user))
 
-def ModifiAccount(request):
-    OldAccount = request.POST.get('oldusername', 'OldAccount')
-    NewAccount = request.POST.get('newusername','NewAccount')
-    models.User.objects.filter(account=OldAccount).update(account=NewAccount)
+def ModifiPersonal(request):
+    Account = request.POST.get('account','Account')
+    NewUserName = request.POST.get('newusername','NewUserName')
+    NewPassWord = request.POST.get('newpassword','NewPassWord')
+    models.User.objects.filter(account=Account).update(username=NewUserName,password=NewPassWord)
+    return HttpResponse(1)
 
-def ModifiPassword(request):
-    OldPassWord = request.POST.get('oldpasswd', 'OldPassWord')
-    NewPassWord = request.POST.get('newpasswd', 'NewPassWord')
-    models.User.objects.filter(password=OldPassWord).update(password=NewPassWord)

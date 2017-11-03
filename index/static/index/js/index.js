@@ -112,24 +112,84 @@ $(function () {
 
 $(function () {
     $('.g-login .form-btn').click(function () {
-        var UserName = $('#l-username').val();
-        var PassWord = $('#l-password').val();
-        $.post('/bookstore/login/', {'account':UserName, 'password':PassWord}, function (result) {
+        var username = $('#l-username').val();
+        var password = $('#l-password').val();
+        $.post('/bookstore/login/', {'account': username, 'password': password}, function (result) {
             alert(result);
         });
-    })
+    });
 });
 
 $(function () {
-
-    $('.g-register .form-btn').click(function () {
-        var UserName = $('#r-username').val();
-        var PassWord = $('#r-password').val();
-        $.post('/bookstore/register/', {'account':UserName, 'password':PassWord}, function (result) {
-            alert(result);
-        });
-
-    })
-
+    $('#r-username').change(function () {
+        var reg=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        if(!reg.test($(this).val())) {
+            $(this).next().html('请输入正确的邮箱地址！');
+        } else {
+            $(this).next().html('');
+        }
+    });
 });
 
+$(function () {
+    $('#r-password2').change(function () {
+        if($(this).val() !== $(this).siblings('#r-password').val()) {
+            $(this).next().html('两次输入密码不一致！');
+        } else {
+            $(this).next().html('');
+        }
+    });
+});
+
+var email_flag = true;
+
+$(function () {
+    $('.g-register .code-btn').click(function () {
+        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        var email = $('#r-username').val();
+        var pwd = $('#r-password2');
+        if (! email_flag) {
+            alert('验证码已发送！');
+        }else if(!reg.test(email)) {
+            alert('请输入正确的邮箱地址！');
+        } else if ($('#r-password').val() === '') {
+            alert('请输入密码！');
+        } else if( pwd.val() !== pwd.siblings('#r-password').val() ) {
+            alert('两次输入密码不一致！');
+        } else {
+            var username = $('#r-username').val();
+            var password = $('#r-password').val();
+            $.post('/bookstore/vercode/', {'account': username, 'password': password}, function (result) {
+                email_flag = false;
+                $('#code').removeAttr('disabled');
+                $('.g-register .form-btn').removeAttr('disabled');
+                alert('发送成功！');
+            });
+        }
+    });
+});
+
+$(function () {
+    $('#code').keyup(function () {
+        var reg = /^\d{6}$/;
+        if (reg.test($(this).val())) {
+            $('.g-register .form-btn').removeClass('disable');
+        }
+    });
+    $('.g-register .form-btn').click(function () {
+        var username = $('#r-username').val();
+        var password = $('#r-password').val();
+        var code = $('#code').val();
+        var reg = /^\d{6}$/;
+        if (email_flag) {
+            alert('请完成以上步骤！');
+        } else if (! reg.test(code)) {
+            alert('验证码格式错误！');
+        } else {
+            $.post('/bookstore/register/', {'account': username, 'password': password}, function (result) {
+            });
+            alert('注册成功！');
+            $('.g-cover').hide();
+        }
+    });
+});
